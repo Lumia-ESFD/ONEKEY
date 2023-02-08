@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [ `whoami` != "root" ]; then
-    echo "sudo or root is required!"
-    exit 1
-fi
-
 wget --no-check-certificate -P /tmp https://git.histb.com/v2fly/v2ray-core/releases/download/v5.2.1/v2ray-linux-arm32-v7a.zip
 mkdir -p /tmp/v2ray
 unzip /tmp/v2ray-linux-arm32-v7a.zip -d /tmp/v2ray
