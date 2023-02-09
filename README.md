@@ -5,7 +5,7 @@
 bash <(curl -sL https://raw.iqiq.io/Lumia-ESFD/ONEKEY/main/V2ray.sh)
 ```
 ## Initsystem
-系统初始化
+系统初始化(适用于UBUNTU系统)
 ```
 bash <(curl -sL https://raw.iqiq.io/Lumia-ESFD/ONEKEY/main/Initsystem.sh)
 ```
