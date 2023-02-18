@@ -7,7 +7,7 @@ set -o pipefail
 # Can retrieve cloudflare Domain id and list zone's, because, lazy
 
 # Place at:
-# curl https://raw.githubusercontent.com/yulewang/cloudflare-api-v4-ddns/master/cf-v4-ddns.sh > /usr/local/bin/cf-dd    ns.sh && chmod +x /usr/local/bin/cf-ddns.sh
+# curl https://raw.githubusercontent.com/yulewang/cloudflare-api-v4-ddns/master/cf-v4-ddns.sh > /usr/local/bin/cf-ddns.sh && chmod +x /usr/local/bin/cf-ddns.sh
 # run `crontab -e` and add next line:
 # */1 * * * * /usr/local/bin/cf-ddns.sh >/dev/null 2>&1
 # or you need log:
@@ -83,7 +83,7 @@ if [ "$CFUSER" = "" ]; then
   echo "and save in ${0} or using the -u flag"
   exit 2
 fi
-if [ "$CFRECORD_NAME" = "" ]; then
+if [ "$CFRECORD_NAME" = "" ]; then 
   echo "Missing hostname, what host do you want to update?"
   echo "save in ${0} or using the -h flag"
   exit 2
@@ -120,8 +120,8 @@ if [ -f $ID_FILE ] && [ $(wc -l $ID_FILE | cut -d " " -f 1) == 4 ] \
     CFRECORD_ID=$(sed -n '2,1p' "$ID_FILE")
 else
     echo "Updating zone_identifier & record_identifier"
-    CFZONE_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$CFZONE_NAME" -H "X-Auth-Email: $CFU    SER" -H "X-Auth-Key: $CFKEY" -H "Content-Type: application/json" | grep -Po '(?<="id":")[^"]*' | head -1 )
-    CFRECORD_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CFZONE_ID/dns_records?name=$CFRECORD_N    AME" -H "X-Auth-Email: $CFUSER" -H "X-Auth-Key: $CFKEY" -H "Content-Type: application/json"  | grep -Po '(?<="id":")    [^"]*' | head -1 )
+    CFZONE_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$CFZONE_NAME" -H "X-Auth-Email: $CFUSER" -H "X-Auth-Key: $CFKEY" -H "Content-Type: application/json" | grep -Po '(?<="id":")[^"]*' | head -1 )
+    CFRECORD_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CFZONE_ID/dns_records?name=$CFRECORD_NAME" -H "X-Auth-Email: $CFUSER" -H "X-Auth-Key: $CFKEY" -H "Content-Type: application/json"  | grep -Po '(?<="id":")[^"]*' | head -1 )
     echo "$CFZONE_ID" > $ID_FILE
     echo "$CFRECORD_ID" >> $ID_FILE
     echo "$CFZONE_NAME" >> $ID_FILE
@@ -135,7 +135,7 @@ RESPONSE=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$CFZONE_ID
   -H "X-Auth-Email: $CFUSER" \
   -H "X-Auth-Key: $CFKEY" \
   -H "Content-Type: application/json" \
-  --data "{\"id\":\"$CFZONE_ID\",\"type\":\"$CFRECORD_TYPE\",\"name\":\"$CFRECORD_NAME\",\"content\":\"$WAN_IP\", \"    ttl\":$CFTTL}")
+  --data "{\"id\":\"$CFZONE_ID\",\"type\":\"$CFRECORD_TYPE\",\"name\":\"$CFRECORD_NAME\",\"content\":\"$WAN_IP\", \"ttl\":$CFTTL}")
 
 if [ "$RESPONSE" != "${RESPONSE%success*}" ] && [ "$(echo $RESPONSE | grep "\"success\":true")" != "" ]; then
   echo "Updated succesfuly!"
